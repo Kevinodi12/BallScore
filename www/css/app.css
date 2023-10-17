@@ -861,4 +861,37 @@ margin-top: 80px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 90px;
 }
+
+.navbar-login{
+  background: #03254C;
+}
+
+.texto-navbar{
+  color: white;}
+
+  .label-flotante {
+    background-color:#D0EFFF ;
+  }
+
+  .input-form {
+    background-color: #D0EFFF ;
+  }
+
+  .texto-login{
+    margin-top: 60px;
+    text-align: center;
+    color: black;
+  }
+
+  .boton-login{
+    border-radius: 0.375rem;
+     background: #33B249;
+  }
+
+  .boton-registro {
+    border-radius: 0.375rem;
+    background: #5783DB;
+  }
+  
