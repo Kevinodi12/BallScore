@@ -17,6 +17,7 @@ var app = new Framework7({
       {path: '/about/', url: 'about.html',},
       {path: '/login/', url: 'login.html',},
       {path: '/registro/', url: 'registro.html',},
+      {path: '/inicio/', url: 'inicio.html',},
     ]
     // ... other parameters
   });
@@ -41,7 +42,7 @@ $$(document).on('page:init', '.page[data-name="index"]', function (e) {
 
 
 $$(document).on('page:init', '.page[data-name="login"]', function (e) {
-
+  $$("#btnInicioSesion").on("click", fnIniciarSesion);
 })
 
 
@@ -54,3 +55,56 @@ $$(document).on('page:init', '.page[data-name="registro"]', function (e) {
 $$(document).on('page:init', '.page[data-name="about"]', function (e) {
 
 })
+
+$$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
+/* var settings = {
+    "url": "https://v3.football.api-sports.io/leagues",
+    "method": "GET",
+    "timeout": 0,
+    "headers": {
+      "x-rapidapi-key": "ede666ceff001501432bb2465411b1db",
+      "x-rapidapi-host": "v3.football.api-sports.io"
+    }, 
+  };
+  
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+  });
+  */ 
+
+})
+
+/* Mis funciones */
+
+var email, clave, nombre, apellido;
+
+function fnIniciarSesion() {
+  email = $$("#loginEmail").val();
+  clave = $$("#loginClave").val();
+
+  if (email!="" && clave!="") {
+
+
+      firebase.auth().signInWithEmailAndPassword(email, clave)
+        .then((userCredential) => {
+          // Signed in
+          var user = userCredential.user;
+
+          console.log("Bienvenid@!!! " + email);
+
+          mainView.router.navigate('/inicio/');
+          // ...
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+
+          console.error(errorCode);
+              console.error(errorMessage);
+        });
+
+
+
+
+  }
+}
