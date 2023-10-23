@@ -43,6 +43,7 @@ $$(document).on('page:init', '.page[data-name="index"]', function (e) {
 
 $$(document).on('page:init', '.page[data-name="login"]', function (e) {
   $$("#btnInicioSesion").on("click", fnIniciarSesion);
+ 
 })
 
 
@@ -57,25 +58,11 @@ $$(document).on('page:init', '.page[data-name="about"]', function (e) {
 })
 
 $$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
-/* var settings = {
-    "url": "https://v3.football.api-sports.io/leagues",
-    "method": "GET",
-    "timeout": 0,
-    "headers": {
-      "x-rapidapi-key": "ede666ceff001501432bb2465411b1db",
-      "x-rapidapi-host": "v3.football.api-sports.io"
-    }, 
-  };
-  
-  $.ajax(settings).done(function (response) {
-    console.log(response);
-  });
-  */ 
-
-})
+llamarApi();
+});
 
 /* Mis funciones */
-
+const apiKey = '71755f9287199e45805472d2ecbdaa14';
 var email, clave, nombre, apellido;
 
 function fnIniciarSesion() {
@@ -107,4 +94,24 @@ function fnIniciarSesion() {
 
 
   }
+}
+
+
+
+function llamarApi (){
+  var myHeaders = new Headers();
+  myHeaders.append("x-rapidapi-key", apiKey);
+  myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
+  
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  
+  fetch("https://v3.football.api-sports.io/fixtures?live=all", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+
 }
