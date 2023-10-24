@@ -59,6 +59,7 @@ $$(document).on('page:init', '.page[data-name="about"]', function (e) {
 
 $$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
 llamarApi();
+mostrarDatos();
 });
 
 /* Mis funciones */
@@ -98,20 +99,51 @@ function fnIniciarSesion() {
 
 
 
-function llamarApi (){
+function llamarApi() {
   var myHeaders = new Headers();
-  myHeaders.append("x-rapidapi-key", apiKey);
+  myHeaders.append("x-rapidapi-key", '71755f9287199e45805472d2ecbdaa14');
   myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
-  
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
-  
-  fetch("https://v3.football.api-sports.io/fixtures?live=all", requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
 
+  var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+  };
+
+  var matchInfoContainer = document.getElementById("matchInfo");
+
+  fetch("https://v3.football.api-sports.io/fixtures?live=all", requestOptions)
+      .then(response => response.json())
+      .then(data => {
+      
+          var partidos = data.response;
+
+       
+          partidos.forEach(matchData => {
+
+            
+              var html = `
+                  <div id="liga-logo"><img src="${matchData.league.logo}" alt="Logo Liga"></div>
+                  <div id="tiempo-partido">${matchData.fixture.status.elapsed}</div>
+                  <div id="logo-equipo1"><img src="${matchData.teams.home.logo}" alt="Logo Equipo 1"></div>
+                  <div id="nombre-equipo1">${matchData.teams.home.name}</div>
+                  <div id="marcador-equipo1">${matchData.goals.home} </div>
+                  <div id="logo-equipo2"><img src="${matchData.teams.away.logo}" alt="Logo Equipo 2"></div>
+                  <div id="nombre-equipo2">${matchData.teams.away.name}</div>
+                  <div id="marcador-equipo2">${matchData.goals.away} </div>
+              `;
+
+              
+              var card = document.createElement('div');
+              card.className = 'card';
+              card.innerHTML = html;
+              matchInfoContainer.appendChild(card);
+          });
+      })
+      .catch(error => console.log('error', error));
 }
+
+
+
+
+

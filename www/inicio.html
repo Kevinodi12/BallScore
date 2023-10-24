@@ -1,75 +1,62 @@
-<!-- We don't need a full layout in this file because this page will be parsed with Ajax.  -->
 <!DOCTYPE html>
 <html>
 
-<meta charset="utf-8">
-<meta name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="format-detection" content="telephone=no">
-<meta name="msapplication-tap-highlight" content="no">
-<!-- Color theme for statusbar -->
-<!-- <meta name="theme-color" content="#2196f3"> -->
-<meta name="color-scheme" content="light dark">
-
-<!-- Your app title -->
-<title>Bienvenido a BallScore!</title>
-<!-- Path to Framework7 Library CSS -->
-<link rel="stylesheet" href="lib/framework7/framework7-bundle.css">
-<!-- Path to icons -->
-<link rel="stylesheet" href="css/icons.css">
-<!-- Path to your custom app styles-->
-<link rel="stylesheet" href="css/app.css">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="color-scheme" content="light dark">
+    <title>Bienvenido a BallScore!</title>
+    <link rel="stylesheet" href="lib/framework7/framework7-bundle.css">
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/app.css">
 </head>
 
-<div class="page" data-name="inicio">
-    <div class="navbar navbar-login">
-        <div class="navbar-inner sliding">
-        <div class="left">
-            <a href="#" class="link back">
-            <i class="icon icon-back color-white"></i>
-            <span class="ios-only">Back</span>
-            </a>
-        </div>
-        <div class="title texto-navbar">BallScore</div>
-        </div>
-    </div>
-    <div class="subnavbar">
-        <div class="subnavbar-inner">
-            <!-- Subnavbar content, for example tabs buttons -->
-            <div class="segmented">
-                <a href="#tab1" class="button button-active">Futbol</a>
-                <a href="#tab2" class="button">Basquet</a>
-                <a href="#tab3" class="button">Otros</a>
+<body>
+    <div class="page" data-name="inicio">
+        <div class="navbar navbar-login">
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back color-white"></i>
+                        <span class="ios-only">Back</span>
+                    </a>
+                </div>
+                <div class="title texto-navbar">BallScore</div>
             </div>
         </div>
-    </div>
-    <div class="page-content">
-     <div id="resultcontainer">
-        <div id="wg-api-football-games"
-        data-host="v3.football.api-sports.io"
-        data-key="Your-Api-Key-Here"
-        data-date=""
-        data-league=""
-        data-season=""
-        data-theme=""
-        data-refresh="15"
-        data-show-toolbar="true"
-        data-show-errors="false"
-        data-show-logos="true"
-        data-modal-game="true"
-        data-modal-standings="true"
-        data-modal-show-logos="true">
-        <script type="module" src="https://widgets.api-sports.io/2.0.3/widgets.js"></script>
-   </div>
-
-   
-   
+        <div class="subnavbar">
+            <div class="subnavbar-inner">
+                <div class="segmented">
+                    <a href="#tab1" class="button button-active">Futbol</a>
+                    <a href="#tab2" class="button">Basquet</a>
+                    <a href="#tab3" class="button">Otros</a>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-    </div>
+        <div class="page-content" id="matchInfo">
+            <div class="block-title">Partidos de Hoy</div>
+           
+                <div class="card-content card-content-padding">
+                    <div id="liga-logo">
+                        <img id="image-logo" src="" />
+                    </div>
+                    <div id="tiempo-partido"></div>
+                    <div id="logo-equipo1"></div>
+                    <div id="nombre-equipo1"></div>
+                    <div id="marcador-equipo1"></div>
+                    <div id="logo-equipo2"></div>
+                    <div id="nombre-equipo2"></div>
+                    <div id="marcador-equipo2"></div>
+                </div>
+            </div>
+        </div>
 
     </div>
+
+</body>
 
 </html>
