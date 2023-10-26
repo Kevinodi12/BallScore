@@ -895,3 +895,85 @@ margin-top: 80px;
     background: #5783DB;
   }
   
+
+#partidos-fecha{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ .botones-fecha{
+  border: 1px solid #2c7ad3;
+  border-radius: 20px;
+  width: 50%;
+}
+
+#image-logo {
+  margin-left: 20px;
+  width: 65px;
+  height: 65px;
+}
+
+#liga-nombre {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.nombre-liga {
+  margin-left: 20px;
+text-align: center;
+font-size: 1rem;
+font-style: normal;
+font-weight: 700;
+line-height: 150%; /* 1.5rem */
+letter-spacing: -0.01rem;
+}
+
+.equipo-info,
+.equipo-info2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.horario-notificacion {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo-equipo1 {
+  width: 70px;
+  height: 70px;
+  margin-left: 60px
+}
+
+.marcador-equipo,
+.marcador-equipo2,
+ p {
+  margin: 0;
+}
+
+.logo-equipo2 {
+    width: 70px;
+    height: 70px;
+    margin-left: 72px
+  
+}
+
+.horario-notificacion {
+  margin-top:20px;
+}
+
+#status-partido ,
+#goles-local ,
+#nombre-equipo1,
+#nombre-equipo2,
+#goles-visitante {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#goles-visitante {
+  margin-right: 14px;
+}
