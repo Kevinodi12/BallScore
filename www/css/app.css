@@ -945,7 +945,8 @@ letter-spacing: -0.01rem;
 .logo-equipo1 {
   width: 70px;
   height: 70px;
-  margin-left: 60px
+  margin-left: 75px;
+  margin-top: 20px;
 }
 
 .marcador-equipo,
@@ -975,5 +976,21 @@ letter-spacing: -0.01rem;
 }
 
 #goles-visitante {
-  margin-right: 14px;
+  margin-right: 15px;
+}
+
+#status-partido {
+  margin-right: 10px;
+}
+
+#notificacion-desactiva-fixture {
+  margin-right: 10px;
+}
+
+#goles-local {
+  margin-right: 15px;
+}
+
+#status-partido {
+  margin-left: 10px;
 }

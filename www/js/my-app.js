@@ -58,6 +58,7 @@ $$(document).on('page:init', '.page[data-name="about"]', function (e) {
 })
 
 $$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
+llamarInfoChampions();
 llamarPartidosChampions();
 llamarPartidosCopadelaliga();
 });
@@ -97,7 +98,39 @@ function fnIniciarSesion() {
   }
 }
 
+// Llama nombre y logo de la champions league
 
+function llamarInfoChampions() {
+    fetch("https://v3.football.api-sports.io/leagues?id=2", {
+    method: "GET",
+    headers: {
+        "x-rapidapi-host": "v3.football.api-sports.io",
+        "x-rapidapi-key": apiKey
+    }
+})
+.then(response => response.json())
+.then(leagueData => {
+
+    const data = leagueData.response[0];
+    
+   
+  
+    const leagueInfo = document.getElementById("leagueInfo");
+    leagueInfo.innerHTML = `
+        <div id="partidos-fecha"></div>
+        <div id="liga-nombre">
+            <div id="liga-logo">
+                <img id="image-logo" src="${data.league.logo}" />
+            </div>
+            <h3 class="nombre-liga">${data.league.name}</h3>
+        </div>
+    `;
+})
+.catch(error => console.log('Error:', error));
+}
+
+
+//Llama partidos del fixture de la champions del dia
 
 function llamarPartidosChampions() {
   var myHeaders = new Headers();
@@ -167,24 +200,10 @@ function llamarPartidosChampions() {
 }
 
 
-/*function pruebaApi (){
-  fetch ("https://v3.football.api-sports.io/fixtures?date=2023-10-25&league=1032&season=2023&timezone=America/Argentina/Buenos_Aires", {
-    method: "GET",
-    headers: {
-        "x-rapidapi-host": "v3.football.api-sports.io",
-        "x-rapidapi-key": apiKey
-    }
-})
-.then(response => response.json()) // Parsea la respuesta como JSON
-.then(data => {
-    console.log(data); // Imprime los datos en formato JSON
-})
-.catch(err => {
-    console.log(err);
-});
 
-}
-*/
+
+//LLama partidos del fixture de la copa de la liga
+
 
 function llamarPartidosCopadelaliga() {
   var myHeaders = new Headers();
@@ -255,6 +274,24 @@ function llamarPartidosCopadelaliga() {
 
 
 
+// Funcion de prueba
 
 
+/*function pruebaApi (){
+  fetch ("https://v3.football.api-sports.io/fixtures?date=2023-10-25&league=1032&season=2023&timezone=America/Argentina/Buenos_Aires", {
+    method: "GET",
+    headers: {
+        "x-rapidapi-host": "v3.football.api-sports.io",
+        "x-rapidapi-key": apiKey
+    }
+})
+.then(response => response.json()) // Parsea la respuesta como JSON
+.then(data => {
+    console.log(data); // Imprime los datos en formato JSON
+})
+.catch(err => {
+    console.log(err);
+});
 
+}
+*/
