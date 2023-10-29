@@ -58,9 +58,9 @@ $$(document).on('page:init', '.page[data-name="about"]', function (e) {
 })
 
 $$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
-llamarInfoChampions();
 llamarPartidosChampions();
-llamarPartidosCopadelaliga();
+//llamarPartidosCopadelaliga();
+//pruebaApi();
 });
 
 /* Mis funciones */
@@ -98,64 +98,46 @@ function fnIniciarSesion() {
   }
 }
 
-// Llama nombre y logo de la champions league
-
-function llamarInfoChampions() {
-    fetch("https://v3.football.api-sports.io/leagues?id=2", {
-    method: "GET",
-    headers: {
-        "x-rapidapi-host": "v3.football.api-sports.io",
-        "x-rapidapi-key": apiKey
-    }
-})
-.then(response => response.json())
-.then(leagueData => {
-
-    const data = leagueData.response[0];
-    
-   
-  
-    const leagueInfo = document.getElementById("leagueInfo");
-    leagueInfo.innerHTML = `
-        <div id="partidos-fecha"></div>
-        <div id="liga-nombre">
-            <div id="liga-logo">
-                <img id="image-logo" src="${data.league.logo}" />
-            </div>
-            <h3 class="nombre-liga">${data.league.name}</h3>
-        </div>
-    `;
-})
-.catch(error => console.log('Error:', error));
-}
 
 
-//Llama partidos del fixture de la champions del dia
+//Llama partidos del fixture de la champions del dia y datos de la liga
 
 function llamarPartidosChampions() {
-  var myHeaders = new Headers();
-  myHeaders.append("x-rapidapi-key", apiKey);
-  myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
-
-  var requestOptions = {
+    var myHeaders = new Headers();
+    myHeaders.append("x-rapidapi-key", apiKey);
+    myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
+  
+    var requestOptions = {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow'
-  };
-
-  var matchInfoContainer = document.getElementById("matchInfo");
-
-  fetch("https://v3.football.api-sports.io/fixtures?date=2023-10-25&league=2&season=2023&timezone=America/Argentina/Buenos_Aires", requestOptions)
+    };
+  
+    var leagueInfoContainer = document.getElementById("leagueInfo");
+    var matchInfoContainer = document.getElementById("matchInfo");
+  
+    fetch("https://v3.football.api-sports.io/fixtures?date=2023-10-25&league=2&season=2023&timezone=America/Argentina/Buenos_Aires", requestOptions)
       .then(response => response.json())
       .then(data => {
+        var partidos = data.response;
+        var liga = data.response[0].league;
+    
+          // ORIGEN DEL ERROR!
+  
+       /* leagueInfoContainer.innerHTML = `
+          <div id="liga-nombre">
+            <div id="liga-logo">
+              <img id="image-logo" src="${liga.logo}" />
+            </div>
+            <h3 class="nombre-liga">${liga.name}</h3>
+          </div>
+        `;*/
 
-          var partidos = data.response;
 
           partidos.forEach(matchData => {
-              
+          
               const fechaHora = new Date(matchData.fixture.date);
 
-            
               const horas = fechaHora.getHours();
               const minutos = fechaHora.getMinutes();
 
@@ -202,30 +184,43 @@ function llamarPartidosChampions() {
 
 
 
-//LLama partidos del fixture de la copa de la liga
+//LLama partidos del fixture de la copa de la liga y datos de la liga
 
 
 function llamarPartidosCopadelaliga() {
-  var myHeaders = new Headers();
-  myHeaders.append("x-rapidapi-key", apiKey);
-  myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
-
-  var requestOptions = {
+    var myHeaders = new Headers();
+    myHeaders.append("x-rapidapi-key", apiKey);
+    myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
+  
+    var requestOptions = {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow'
-  };
-
-  var matchInfoContainer = document.getElementById("matchInfo");
-
-  fetch("https://v3.football.api-sports.io/fixtures?date=2023-10-25&league=1032&season=2023&timezone=America/Argentina/Buenos_Aires", requestOptions)
+    };
+  
+    var leagueInfoContainer = document.getElementById("leagueInfo2");
+    var matchInfoContainer = document.getElementById("matchInfo2");
+  
+    fetch("https://v3.football.api-sports.io/fixtures?date=2023-10-25&league=1032&season=2023&timezone=America/Argentina/Buenos_Aires", requestOptions)
       .then(response => response.json())
       .then(data => {
+        var partidos = data.response;
+        var liga = data.response[0].league;
+      
+  
+        leagueInfoContainer.innerHTML = `
+          <div id="partidos-fecha"></div>
+          <div id="liga-nombre">
+            <div id="liga-logo">
+              <img id="image-logo" src="${liga.logo}" />
+            </div>
+            <h3 class="nombre-liga">${liga.name}</h3>
+          </div>
+        `;
 
-          var partidos = data.response;
 
           partidos.forEach(matchData => {
-              
+          
               const fechaHora = new Date(matchData.fixture.date);
 
             
@@ -271,27 +266,28 @@ function llamarPartidosCopadelaliga() {
       })
       .catch(error => console.log('error', error));
 }
+
+
+
 
 
 
 // Funcion de prueba
 
-
-/*function pruebaApi (){
-  fetch ("https://v3.football.api-sports.io/fixtures?date=2023-10-25&league=1032&season=2023&timezone=America/Argentina/Buenos_Aires", {
+function pruebaApi (){
+  fetch ("https://v3.football.api-sports.io/fixtures?date=2023-10-25&league=2&season=2023&timezone=America/Argentina/Buenos_Aires", {
     method: "GET",
     headers: {
         "x-rapidapi-host": "v3.football.api-sports.io",
         "x-rapidapi-key": apiKey
     }
 })
-.then(response => response.json()) // Parsea la respuesta como JSON
+.then(response => response.json()) 
 .then(data => {
-    console.log(data); // Imprime los datos en formato JSON
+    console.log(data); 
 })
 .catch(err => {
     console.log(err);
 });
 
 }
-*/
