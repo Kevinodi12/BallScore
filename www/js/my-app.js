@@ -59,7 +59,7 @@ $$(document).on('page:init', '.page[data-name="about"]', function (e) {
 
 $$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
 llamarPartidosChampions();
-//llamarPartidosCopadelaliga();
+llamarPartidosCopadelaliga();
 //pruebaApi();
 });
 
@@ -144,7 +144,7 @@ function llamarPartidosChampions() {
             
               const horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
 
-              var html = `
+              let html = `
 
     
               <div class="equipo-info">
@@ -172,7 +172,7 @@ function llamarPartidosChampions() {
                   
               `;
 
-              var card = document.createElement('div');
+              let card = document.createElement('div');
               card.className = 'card';
               card.innerHTML = html;
               matchInfoContainer.appendChild(card);
@@ -198,8 +198,8 @@ function llamarPartidosCopadelaliga() {
       redirect: 'follow'
     };
   
-    var leagueInfoContainer = document.getElementById("leagueInfo2");
-    var matchInfoContainer = document.getElementById("matchInfo2");
+    const leagueInfoContainer = document.getElementById("leagueInfo2");
+    const matchInfoContainer = document.getElementById("matchInfo2");
   
     fetch("https://v3.football.api-sports.io/fixtures?date=2023-10-25&league=1032&season=2023&timezone=America/Argentina/Buenos_Aires", requestOptions)
       .then(response => response.json())
@@ -208,7 +208,7 @@ function llamarPartidosCopadelaliga() {
         var liga = data.response[0].league;
       
   
-        leagueInfoContainer.innerHTML = `
+       /* leagueInfoContainer.innerHTML = `
           <div id="partidos-fecha"></div>
           <div id="liga-nombre">
             <div id="liga-logo">
@@ -217,7 +217,7 @@ function llamarPartidosCopadelaliga() {
             <h3 class="nombre-liga">${liga.name}</h3>
           </div>
         `;
-
+          */
 
           partidos.forEach(matchData => {
           
