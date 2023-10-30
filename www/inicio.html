@@ -54,7 +54,44 @@
                     <button class="button">Mañana</button>
                   </p>
             </div>
-
+            <div class="card">
+            <div class="card-header">  <div id="liga-nombre">
+                <div id="liga-logo">
+                  <img id="image-logo" src="img/2.png" />
+                </div>
+                <h3 class="nombre-liga">Uefa Champions League</h3>    
+                <button class="button button-fill boton-plegable-header">
+                    <i class="f7-icons">chevron_down</i>
+                </button>
+              </div></div>
+            <hr>
+            <div class="card-content card-content-padding">
+            <div class="equipo-info">
+                <div id="logo-equipo1">
+                    <img src="img/529.png" id="equipo1-logo" class="logo-equipo1" />
+                </div>
+                <div id="nombre-equipo1" class="nombre-equipo">${matchData.teams.home.name}</div>
+                <div id="marcador-equipo1" class="marcador-equipo1">
+                    <p id="goles-local">${matchData.goals.home}</p>
+                </div>
+            </div>
+            <div class="horario-notificacion">
+                <div id="horario-partido"><p id="status-partido">${horaYMinutos}</p></div>
+                <div id="notificacion-desactiva-fixture"><i class="f7-icons">bell_slash</i></div>
+            </div>
+            </div>
+            <div class="equipo-info2">
+                <div id="logo-equipo2">
+                    <img src="img/550.png" id="equipo2-logo" class="logo-equipo2" />
+                </div>
+                <div id="nombre-equipo2" class="nombre-equipo2">${matchData.teams.away.name}</div>
+                <div id="marcador-equipo2" class="marcador-equipo2">
+                    <p id="goles-visitante">${matchData.goals.away}</p>
+                </div>
+            </div>
+            <hr>
+                </div>
+            </div>
             <div id="leagueInfo"></div>
      
             
@@ -64,6 +101,9 @@
 
             <div id="matchInfo2"></div>
 
+            <div id="leagueInfo2"></div>
+
+            <div id="matchInfo3"></div>
 
 
 
