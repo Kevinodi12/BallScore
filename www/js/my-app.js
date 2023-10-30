@@ -70,10 +70,19 @@ const apiKey = '71755f9287199e45805472d2ecbdaa14';
 var email, clave, nombre, apellido;
 
 function fnPlegartarjetas() {
-  var tarjeta = $$(this).closest('.plegable-card');
- 
-  tarjeta.find('.plegable-content').slideToggle();
+  var $contenidoPlegable = $$(this).closest(".card").find(".plegable-content");
+  
+  if ($contenidoPlegable.hasClass("plegable-content")) {
+    $contenidoPlegable.removeClass("plegable-content").addClass("desplegable-content");
+  } else if($contenidoPlegable.hasClass("desplegable-content")) {
+    
+    $contenidoPlegable.removeClass("desplegable-content").addClass("plegable-content");
+  }
 }
+
+
+  
+
 
 
 
