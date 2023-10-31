@@ -70,7 +70,7 @@ const apiKey = '71755f9287199e45805472d2ecbdaa14';
 var email, clave, nombre, apellido;
 
 function fnPlegartarjetas() {
-  var $contenidoPlegable = $$(this).closest(".card").find(".plegable-content");
+  var $contenidoPlegable = $$(this).closest(".card").find("#plegable-contenido");
   
   if ($contenidoPlegable.hasClass("plegable-content")) {
     $contenidoPlegable.removeClass("plegable-content").addClass("desplegable-content");

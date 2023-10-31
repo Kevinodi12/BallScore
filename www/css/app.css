@@ -1014,7 +1014,7 @@ letter-spacing: -0.01rem;
 
 }
 
-.plegable-card .plegable-content {
+.plegable-content {
   display: none;
 }
 
@@ -1025,5 +1025,6 @@ letter-spacing: -0.01rem;
 }
 
 .desplegable-content{
-  
+  display: block;
 }
+
