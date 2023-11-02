@@ -28,7 +28,12 @@ var app = new Framework7({
     {
       path: '/inicio/',
       url: 'inicio.html',
+
     },
+  {
+    path: '/registroFin/',
+      url: 'registroFin.html',}
+      
   ]
   // ... other parameters
 });
@@ -59,9 +64,12 @@ $$(document).on('page:init', '.page[data-name="login"]', function (e) {
 
 
 $$(document).on('page:init', '.page[data-name="registro"]', function (e) {
+$$("#btnRegistrar").on("click", fnRegistro);
 
 })
 
+$$(document).on('page:init', '.page[data-name="registroFin"]', function (e) {
+})
 
 
 $$(document).on('page:init', '.page[data-name="about"]', function (e) {
@@ -70,15 +78,21 @@ $$(document).on('page:init', '.page[data-name="about"]', function (e) {
 
 $$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
   $$("#boton-plegable").on("click", fnPlegartarjetas);
-  llamarPartidosChampions();
-  llamarPartidosCopadelaliga();
-  llamarPartidosPremierLeague();
+  //llamarPartidosChampions();
+  //llamarPartidosCopadelaliga();
+  //llamarPartidosPremierLeague();
   //pruebaApi();
 });
 
-/* Mis funciones */
+/*Variables Globales*/
+
 const apiKey = '71755f9287199e45805472d2ecbdaa14';
-var email, clave, nombre, apellido;
+var email, clave, nombre, apellido , numeroTelefono;
+var db = firebase.firestore();
+var colUsuarios = db.collection("Usuarios");
+
+
+/* Mis funciones */
 
 function fnPlegartarjetas() {
   var $contenidoPlegable = $$(this).closest(".card").find("#plegable-contenido");
@@ -95,7 +109,7 @@ function fnPlegartarjetas() {
 
 
 
-
+// Funcion de inicio de sesion
 
 function fnIniciarSesion() {
   email = $$("#loginEmail").val();
@@ -127,6 +141,62 @@ function fnIniciarSesion() {
 
   }
 }
+
+
+//Funcion de registro
+
+function fnRegistro() {
+  var nombre = $$("#nombreRegistro").val();
+  var apellido = $$("#apellidoRegistro").val();
+  var email = $$("#emailRegistro").val();
+  var clave = $$("#claveRegistro").val();
+  var telefono = $$("#celularRegistro").val();
+
+  if (email != "" && clave != "") {
+    firebase.auth().createUserWithEmailAndPassword(email, clave)
+      .then((userCredential) => {
+        // Usuario registrado con éxito
+        var user = userCredential.user;
+        console.log("¡Bienvenid@!!! " + email);
+
+        // Después de registrar al usuario, puedes agregar sus datos a Firestore
+        if (nombre != "" && telefono != "") {
+          var datos = {
+            nombre: nombre,
+            email: email,
+            apellido: apellido,
+            numeroTelefono: telefono
+          };
+
+          // Obten una referencia a la colección de usuarios en Firestore
+          var colUsuarios = firebase.firestore().collection("Usuarios");
+
+          // Agrega los datos a Firestore usando el email como ID del documento
+          colUsuarios.doc(email).set(datos)
+            .then(function() {
+              console.log("Datos del usuario agregados a Firestore.");
+              mainView.router.navigate('/registroFin/');
+            })
+            .catch(function(error) {
+              console.error("Error al agregar datos del usuario a Firestore: ", error);
+            });
+        }
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.error(errorCode);
+        console.error(errorMessage);
+        if (errorCode == "auth/email-already-in-use") {
+          console.error("El correo electrónico ya está en uso.");
+        }
+      });
+  }
+}
+
+
+
+      
 
 
 //LLama partidos del fixture de la copa de la liga y datos de la liga
@@ -173,8 +243,11 @@ function llamarPartidosCopadelaliga() {
         const fechaHora = new Date(matchData.fixture.date);
         const horas = fechaHora.getHours();
         const minutos = fechaHora.getMinutes();
-        const horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        let horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+   
 
+        const golesLocal = matchData.goals.home != null ? matchData.goals.home : "-";
+        const golesVisitante = matchData.goals.away != null ? matchData.goals.away : "-";
         html += `
         <div id="contenedor-mas-Info">
                <button class="button button-tonal" id="boton-masInfo"><i class="f7-icons info-icon">info_circle</i></button>
@@ -185,7 +258,7 @@ function llamarPartidosCopadelaliga() {
             </div>
             <div id="nombre-equipo1" class="nombre-equipo">${matchData.teams.home.name}</div>
             <div id="marcador-equipo1" class="marcador-equipo1">
-              <p id="goles-local">${matchData.goals.home}</p>
+              <p id="goles-local">${golesLocal}</p>
             </div>
           </div>
           <div class="horario-notificacion">
@@ -198,7 +271,7 @@ function llamarPartidosCopadelaliga() {
             </div>
             <div id="nombre-equipo2" class="nombre-equipo2">${matchData.teams.away.name}</div>
             <div id="marcador-equipo2" class="marcador-equipo2">
-              <p id="goles-visitante">${matchData.goals.away}</p>
+              <p id="goles-visitante">${golesVisitante}</p>
             </div>
           </div>
           <hr>
@@ -272,8 +345,11 @@ function llamarPartidosPremierLeague() {
         const fechaHora = new Date(matchData.fixture.date);
         const horas = fechaHora.getHours();
         const minutos = fechaHora.getMinutes();
-        const horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        let horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        const golesLocal = matchData.goals.home != null ? matchData.goals.home : "-";
+        const golesVisitante = matchData.goals.away != null ? matchData.goals.away : "-";
 
+    
         html += `
         <div id="contenedor-mas-Info">
         <button class="button button-tonal" id="boton-masInfo"><i class="f7-icons info-icon">info_circle</i></button>
@@ -284,7 +360,7 @@ function llamarPartidosPremierLeague() {
             </div>
             <div id="nombre-equipo1" class="nombre-equipo">${matchData.teams.home.name}</div>
             <div id="marcador-equipo1" class="marcador-equipo1">
-              <p id="goles-local">${matchData.goals.home}</p>
+              <p id="goles-local">${golesLocal}</p>
             </div>
           </div>
           <div class="horario-notificacion">
@@ -297,7 +373,7 @@ function llamarPartidosPremierLeague() {
             </div>
             <div id="nombre-equipo2" class="nombre-equipo2">${matchData.teams.away.name}</div>
             <div id="marcador-equipo2" class="marcador-equipo2">
-              <p id="goles-visitante">${matchData.goals.away}</p>
+              <p id="goles-visitante">${golesVisitante}</p>
             </div>
           </div>
           <hr>

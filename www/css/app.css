@@ -1044,3 +1044,23 @@ letter-spacing: -0.01rem;
   justify-items: flex-end;
 }
 
+.texto-confirmacionRegistro {
+  text-align: center;
+}
+
+#contenedor-confirmacion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#graciasimagen {
+  width: 150px;
+  height: 150px;
+}
+
+.texto-gracias {
+  text-align: center; 
+}
