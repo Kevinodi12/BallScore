@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<meta charset="utf-8">
+<meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
+<!-- Color theme for statusbar -->
+<!-- <meta name="theme-color" content="#2196f3"> -->
+<meta name="color-scheme" content="light dark">
+
+<!-- Your app title -->
+<title>Bienvenido a BallScore!</title>
+<!-- Path to Framework7 Library CSS -->
+<link rel="stylesheet" href="lib/framework7/framework7-bundle.css">
+<!-- Path to icons -->
+<link rel="stylesheet" href="css/icons.css">
+<!-- Path to your custom app styles-->
+<link rel="stylesheet" href="css/app.css">
+</head>
+<div class="page" data-name="partidosFutMan">
+
+    <!--Navbar-->
+
+    <div class="navbar navbar-login">
+        <div class="navbar-inner sliding">
+            <div class="left">
+                <a href="#" class="link back">
+                    <i class="icon icon-back color-white"></i>
+                    <span class="ios-only">Back</span>
+                </a>
+            </div>
+            <div class="title texto-navbar">BallScore</div>
+        </div>
+    </div>
+
+    <!--Subnavbar-->
+
+    <div class="subnavbar">
+        <div class="subnavbar-inner">
+            <div class="segmented">
+                <a href="#tab1" class="button button-active">Futbol</a>
+                <a href="#tab2" class="button">Basquet NBA</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Contenido de pagina-->
+
+    <div class="page-content">
+        <div id="partidos-fechadia">
+            <p class="segmented segmented-raised botones-fecha">
+                <button class="button">Ayer</button>
+                <a href="/inicio/" class="button ">Hoy</a>
+                <a href="/partidosFutMan/" class="button button-active"> Partidos Mañana</a>
+            </p>
+        </div>
+        
+        </div>
+        <div id="matchInfo1Man"></div> 
+        <div id="matchInfo"></div>
+
+
+    </div>
+</div>
+</html>
