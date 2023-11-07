@@ -37,7 +37,12 @@ var app = new Framework7({
     {
       path: '/partidosFutMan/',
       url: 'partidosFutMan.html',
-    }
+
+    },
+    {
+      path: '/inicioNBA/',
+      url: 'inicioNBA.html',
+    },
 
   ]
   // ... other parameters
@@ -58,7 +63,7 @@ $$(document).on('page:init', function (e) {
 
 // Option 2. Using live 'page:init' event handlers for each page
 $$(document).on('page:init', '.page[data-name="index"]', function (e) {
- pruebaApi(fechaFormateadadiasiguiente);
+  //pruebaApi(fechaFormateadadiasiguiente);
 })
 
 
@@ -83,23 +88,31 @@ $$(document).on('page:init', '.page[data-name="about"]', function (e) {
 
 
 $$(document).on('page:init', '.page[data-name="partidosFutMan"]', function (e) {
+  //llamarPartidosCopaDeLaLigaMan();
   llamarPartidosChampionsMan();
+
+})
+
+
+$$(document).on('page:init', '.page[data-name="inicioNBA"]', function (e) {
+  llamarPartidosNBA();
+
 })
 
 
 
 $$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
   $$("#boton-plegable").on("click", fnPlegartarjetas);
- // llamarPartidosChampions(fechaFormateada);
+  llamarPartidosChampions(fechaFormateada);
   //llamarPartidosCopadelaliga(fechaFormateada);
-  // llamarPartidosPremierLeague();
+  //llamarPartidosPremierLeague();
   //llamarPartidosLaLiga();
   //llamarPartidosSerieA();
   // llamarPartidosBundesliga();
   //llamarPartidosLigue1();
   //llamarPartidosCopaArgentina();
   //llamarPartidosCopaLibertadores();
- 
+
 });
 
 /*Variables Globales*/
@@ -192,11 +205,11 @@ function fnRegistro() {
   if (email != "" && clave != "") {
     firebase.auth().createUserWithEmailAndPassword(email, clave)
       .then((userCredential) => {
- 
+
         var user = userCredential.user;
         console.log("¡Bienvenid@!!! " + email);
 
-    
+
         if (nombre != "" && telefono != "") {
           var datos = {
             nombre: nombre,
@@ -205,10 +218,10 @@ function fnRegistro() {
             numeroTelefono: telefono
           };
 
-    
+
           var colUsuarios = firebase.firestore().collection("Usuarios");
 
-         
+
           colUsuarios.doc(email).set(datos)
             .then(function () {
               console.log("Datos del usuario agregados a Firestore.");
@@ -287,7 +300,7 @@ function llamarPartidosCopadelaliga(fecha) {
         const minutos = fechaHora.getMinutes();
         let horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
 
-
+console.log(matchData.fixture.status)
         const golesLocal = matchData.goals.home != null ? matchData.goals.home : "-";
         const golesVisitante = matchData.goals.away != null ? matchData.goals.away : "-";
         html += `
@@ -455,7 +468,6 @@ function llamarPartidosPremierLeague() {
 
 
 //Llama partidos del fixture de la champions del dia y datos de la liga
-
 function llamarPartidosChampions(fecha) {
   var myHeaders = new Headers();
   myHeaders.append("x-rapidapi-key", apiKey);
@@ -499,9 +511,28 @@ function llamarPartidosChampions(fecha) {
         const fechaHora = new Date(matchData.fixture.date);
         const horas = fechaHora.getHours();
         const minutos = fechaHora.getMinutes();
-        const horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        let horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
         const golesLocal = matchData.goals.home != null ? matchData.goals.home : "-";
         const golesVisitante = matchData.goals.away != null ? matchData.goals.away : "-";
+        const estadoPartido = matchData.fixture.status.short;
+        
+         
+        if (estadoPartido === "NS") {
+       
+          horaYMinutos;
+        } else if (estadoPartido === "1H") {
+      
+          horaYMinutos = matchData.fixture.status.elapsed + "'";
+        } else if (estadoPartido === "HT") {
+          
+          horaYMinutos = "ET";
+        } else if (estadoPartido === "2H") {
+        
+          horaYMinutos = matchData.fixture.status.elapsed + "'";
+        } else if (estadoPartido === "FT") {
+          horaYMinutos = "Final";
+        }
+
 
         html += `
         <div id="contenedor-mas-Info">
@@ -558,6 +589,7 @@ function llamarPartidosChampions(fecha) {
     })
     .catch(error => console.log('error', error));
 }
+
 
 
 function llamarPartidosSerieA() {
@@ -772,7 +804,7 @@ function llamarPartidosLaLiga() {
 
 /*PARTIDOS DIA SIGUIENTE */
 
-function llamarPartidosChampionsMan(fecha) {
+function llamarPartidosCopaDeLaLigaMan() {
   var myHeaders = new Headers();
   myHeaders.append("x-rapidapi-key", apiKey);
   myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
@@ -784,6 +816,124 @@ function llamarPartidosChampionsMan(fecha) {
   };
 
   var matchInfoContainer = document.getElementById("matchInfo1Man");
+
+
+
+
+  var url = `https://v3.football.api-sports.io/fixtures?date=${fechaFormateadadiasiguiente}&league=1032&season=${año}&timezone=America/Argentina/Buenos_Aires`;
+
+  fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      var partidos = data.response;
+      var liga = data.response[0].league;
+
+      let html = `
+        <div class="card plegable-card">
+          <div class="card-header">
+            <div id="liga-nombre">
+              <div id="liga-logo">
+                <img id="image-logo" src=${liga.logo} />
+              </div>
+              <h3 class="nombre-liga">${liga.name}</h3>
+              <button id="boton-plegable" class="button button-fill boton-plegable-header">
+                <i class="f7-icons">chevron_down</i>
+              </button>
+            </div>
+          </div>
+          <div id="plegable-contenido" class="plegable-content" style="display: none;">
+            <hr>
+            <div class="card-content card-content-padding">
+      `;
+
+      partidos.forEach(matchData => {
+        const fechaHora = new Date(matchData.fixture.date);
+        const horas = fechaHora.getHours();
+        const minutos = fechaHora.getMinutes();
+        let horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+
+
+        const golesLocal = matchData.goals.home != null ? matchData.goals.home : "-";
+        const golesVisitante = matchData.goals.away != null ? matchData.goals.away : "-";
+        html += `
+        <div id="contenedor-mas-Info">
+               <button class="button button-tonal" id="boton-masInfo"><i class="f7-icons info-icon">info_circle</i></button>
+            </div>
+          <div class="equipo-info">
+            <div id="logo-equipo1">
+              <img src=${matchData.teams.home.logo} id="equipo1-logo" class="logo-equipo1" />
+            </div>
+            <div id="nombre-equipo1" class="nombre-equipo">${matchData.teams.home.name}</div>
+            <div id="marcador-equipo1" class="marcador-equipo1">
+              <p id="goles-local">${golesLocal}</p>
+            </div>
+          </div>
+          <div class="horario-notificacion">
+            <div id="horario-partido"><p id="status-partido">${horaYMinutos}</p></div>
+            <div id="notificacion-desactiva-fixture"><i class="f7-icons">bell_slash</i></div>
+          </div>
+          <div class="equipo-info2">
+            <div id="logo-equipo2">
+              <img src=${matchData.teams.away.logo} id="equipo2-logo" class="logo-equipo2" />
+            </div>
+            <div id="nombre-equipo2" class="nombre-equipo2">${matchData.teams.away.name}</div>
+            <div id="marcador-equipo2" class="marcador-equipo2">
+              <p id="goles-visitante">${golesVisitante}</p>
+            </div>
+          </div>
+          <hr>
+        `;
+      });
+
+      html += `
+            </div>
+          </div>
+        </div>
+      `;
+
+      let card = document.createElement('div');
+      card.innerHTML = html;
+      matchInfoContainer.appendChild(card);
+
+      const botonPlegable = card.querySelector("#boton-plegable");
+      const contenidoPlegable = card.querySelector("#plegable-contenido");
+
+      botonPlegable.addEventListener("click", () => {
+        if (contenidoPlegable.style.display === "none") {
+          contenidoPlegable.style.display = "block";
+          botonPlegable.innerHTML = '<i class="f7-icons">chevron_up</i>';
+        } else {
+          contenidoPlegable.style.display = "none";
+          botonPlegable.innerHTML = '<i class="f7-icons">chevron_down</i>';
+        }
+      });
+    })
+    .catch(error => console.log('error', error));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function llamarPartidosChampionsMan() {
+  var myHeaders = new Headers();
+  myHeaders.append("x-rapidapi-key", apiKey);
+  myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow',
+  };
+
+  var matchInfoContainer = document.getElementById("matchInfo2Man");
 
 
 
@@ -882,12 +1032,15 @@ function llamarPartidosChampionsMan(fecha) {
 
 
 
+
+
+
 // Funcion de prueba
 
 function pruebaApi(fecha) {
-  
-var url = `https://v3.football.api-sports.io/fixtures?date=${fechaFormateadadiasiguiente}&league=2&season=${año}&timezone=America/Argentina/Buenos_Aires`
-  
+
+  var url = `https://v3.football.api-sports.io/fixtures?date=${fechaFormateadadiasiguiente}&league=2&season=${año}&timezone=America/Argentina/Buenos_Aires`
+
   fetch(url, {
       method: "GET",
       headers: {
@@ -904,3 +1057,8 @@ var url = `https://v3.football.api-sports.io/fixtures?date=${fechaFormateadadias
     });
 
 }
+
+
+
+
+/* ---------------------- PARTE NBA ---------------------- */
