@@ -105,16 +105,16 @@ $$(document).on('page:init', '.page[data-name="partidosFutMan"]', function (e) {
 
 
 $$(document).on('page:init', '.page[data-name="inicioNBA"]', function (e) {
-  //llamarPartidosNBA();
-
+  llamarPartidosNBA();
+//pruebaApiNBA();
 })
 
 $$(document).on('page:init', '.page[data-name="partidosFutAyer"]', function (e) {
-  llamarPartidosCopadelaligaAyer();
+  //llamarPartidosCopadelaligaAyer();
  // llamarPartidosChampionsAyer();
-  llamarPartidosPremierLeagueAyer();
-  llamarPartidosSerieAAyer();
-  llamarPartidosLaLigaAyer();
+  //llamarPartidosPremierLeagueAyer();
+  //llamarPartidosSerieAAyer();
+  //llamarPartidosLaLigaAyer();
 
 })
 
@@ -122,7 +122,7 @@ $$(document).on('page:init', '.page[data-name="partidosFutAyer"]', function (e) 
 $$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
   $$("#boton-plegable").on("click", fnPlegartarjetas);
  // llamarPartidosChampions(fechaFormateada);
-  llamarPartidosCopadelaliga(fechaFormateada);
+//llamarPartidosCopadelaliga(fechaFormateada);
   //llamarPartidosEuropaLeague();
   //llamarPartidosPremierLeague();
   //llamarPartidosLaLiga();
@@ -2577,7 +2577,7 @@ function llamarPartidosLaLigaAyer(fecha) {
 
 function pruebaApi(fecha) {
 
-  var url = `https://v3.football.api-sports.io/fixtures?date=${fechaFormateadaAnterior}&league=2&season=${año}&timezone=America/Argentina/Buenos_Aires`
+  var url = `https://v2.nba.api-sports.io/games?date=2023-11-21`
 
   fetch(url, {
       method: "GET",
@@ -2597,6 +2597,138 @@ function pruebaApi(fecha) {
 }
 
 
+function pruebaApiNBA() {
+  var myHeaders = new Headers();
+myHeaders.append("x-rapidapi-key", apiKey);
+myHeaders.append("x-rapidapi-host", "v1.basketball.api-sports.io");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://v1.basketball.api-sports.io/games?league=12&season=2023-2024&date=2023-11-21&timezone=America/Argentina/Buenos_Aires", requestOptions)
+  .then(response => response.json())
+  .then(result => console.log(result))
+  .then(data => console.log(data))
+  .catch(error => console.log('error', error));
+}
+
+
 
 
 /* ---------------------- PARTE NBA ---------------------- */
+function llamarPartidosNBA(fecha) {
+  var myHeaders = new Headers();
+  myHeaders.append("x-rapidapi-key", apiKey);
+  myHeaders.append("x-rapidapi-host", "v1.basketball.api-sports.io");
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow',
+  };
+
+  var matchInfoContainer = document.getElementById("matchNBA1");
+
+  var url = `https://v1.basketball.api-sports.io/games?league=12&season=2023-2024&date=${fechaFormateada}&timezone=America/Argentina/Buenos_Aires`;
+
+  fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      var partidos = data.response;
+      console.log(partidos);
+
+      if (!partidos || partidos.length === 0) {
+        // Manejar el caso en que no hay partidos
+        console.error('No se encontraron partidos.');
+        return;
+      }
+
+      var liga = partidos[0].league;
+
+      let html = `
+        <div class="card plegable-card">
+          <div class="card-header">
+            <div id="liga-nombre">
+              <div id="liga-logo">
+                <img id="image-logo" src=${liga.logo} />
+              </div>
+              <h3 class="nombre-liga">${liga.name}</h3>
+            </div>
+          </div>
+          <div id="plegable-contenido">
+            <hr>
+            <div class="card-content card-content-padding">
+      `;
+
+      partidos.forEach(matchData => {
+        const fechaHora = new Date(matchData.date);
+        const horas = fechaHora.getHours();
+        const minutos = fechaHora.getMinutes();
+        let horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        const estadoPartido = matchData.status.short;
+        const golesLocal = matchData.scores.home.total != null ? matchData.scores.home.total : "-";
+        const golesVisitante = matchData.scores.away.total != null ? matchData.scores.away.total : "-";
+
+        if (estadoPartido === "NS") {
+          horaYMinutos;
+        } else if (estadoPartido === "Q1") {
+          horaYMinutos = "1Q";
+        } else if (estadoPartido === "Q2") {
+          horaYMinutos = "2Q";
+        } else if (estadoPartido === "Q3") {
+          horaYMinutos = "3Q";
+        } else if (estadoPartido === "Q4") {
+          horaYMinutos = "4Q";
+        } else if (estadoPartido === "OT") {
+          horaYMinutos = "TE";
+        } else if (estadoPartido === "BT") {
+          horaYMinutos = "TO";
+        } else if (estadoPartido === "HT") {
+          horaYMinutos = "ET";
+        } else if (estadoPartido === "FT") {
+          horaYMinutos = "Final";
+        }
+        
+
+        html += `
+          <div class="equipo-info">
+            <div id="logo-equipo1">
+              <img src=${matchData.teams.home.logo} id="equipo1-logo" class="logo-equipo1" />
+            </div>
+            <div id="nombre-equipo1" class="nombre-equipo">${matchData.teams.home.name}</div>
+            <div id="marcador-equipo1" class="marcador-equipo1">
+              <p id="goles-local">${golesLocal}</p>
+            </div>
+          </div>
+          <div class="horario-notificacion">
+            <div id="horario-partido"><p id="status-partido">${horaYMinutos}</p></div>
+          </div>
+          <div class="equipo-info2">
+            <div id="logo-equipo2">
+              <img src=${matchData.teams.away.logo} id="equipo2-logo" class="logo-equipo2" />
+            </div>
+            <div id="nombre-equipo2" class="nombre-equipo2">${matchData.teams.away.name}</div>
+            <div id="marcador-equipo2" class="marcador-equipo2">
+              <p id="goles-visitante">${golesVisitante}</p>
+            </div>
+          </div>
+          <hr>
+        `;
+      });
+
+      html += `
+            </div>
+          </div>
+        </div>
+      `;
+
+      let card = document.createElement('div');
+      card.innerHTML = html;
+      matchInfoContainer.appendChild(card);
+
+    })
+    .catch(error => console.log('error', error));
+}
