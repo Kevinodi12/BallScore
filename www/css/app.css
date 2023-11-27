@@ -1068,3 +1068,69 @@ letter-spacing: -0.01rem;
 .no-hay-partidos {
   text-align: center;
 }
+
+
+.container-masInfo {
+  display: flex; /* Configura el contenedor como un contenedor flex */
+  align-items: center; 
+  align-content: space-between;
+  justify-content: space-between;
+}
+
+.container-logoEquipoVisitante-masInfo,
+.container-logoEquipoLocal-masInfo {
+    margin-left: 10px;
+    margin-top: 10px
+  }
+
+  .logo-equipoVisitante-masInfo{
+    margin-right: 10px;
+  }
+
+.texto-fecha-masInfo {
+  align-content: center;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.logo-equipoVisitante-masInfo,
+.logo-equipoLocal-masInfo {
+  width: 80px;
+  height: 80px;
+
+}
+.texto-resultado-masInfo {
+  text-align: center;
+  font-size: 40px;
+  font-weight: bolder;
+}
+
+.container-nombre-local-masInfo {
+  display: flex; 
+  align-items: center; 
+  align-content: space-between;
+  justify-content: space-between;
+}
+
+.texto-estado-partido-masInfo {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 16px;
+}
+
+.texto-nombre-local-masInfo {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.texto-nombre-visitante-masInfo {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  margin-right: 5px;
+}
+

@@ -46,6 +46,11 @@ var app = new Framework7({
     {
       path: '/partidosFutAyer/',
       url: 'partidosFutAyer.html',
+    
+    },
+    { path: '/masInfo/',
+      url: 'masInfo.html',
+      
     }
 
   ]
@@ -129,10 +134,14 @@ $$(document).on('page:init', '.page[data-name="inicio"]', function (e) {
   //llamarPartidosSerieA();
   // llamarPartidosBundesliga();
   //llamarPartidosLigue1();
-  //llamarPartidosCopaArgentina();
+  llamarPartidosCopaArgentina();
   //llamarPartidosCopaLibertadores();
-
 });
+
+$$(document).on('page:init', '.page[data-name="masInfo"]', function (e) {
+
+
+})
 
 /*Variables Globales*/
 
@@ -1032,6 +1041,131 @@ function llamarPartidosEuropaLeague() {
     .catch(error => console.log('Hoy no hay partidos de Europa League ', error));
 
 }
+
+
+function llamarPartidosCopaArgentina() {
+  var myHeaders = new Headers();
+  myHeaders.append("x-rapidapi-key", apiKey);
+  myHeaders.append("x-rapidapi-host", "v3.football.api-sports.io");
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow',
+  };
+
+  var matchInfoContainer = document.getElementById("matchInfo9");
+
+
+
+
+  var url = `https://v3.football.api-sports.io/fixtures?date=2023-11-22&league=130&season=${año}&timezone=America/Argentina/Buenos_Aires`;
+
+  fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      var partidos = data.response;
+      var liga = data.response[0].league;
+
+      let html = `
+        <div class="card plegable-card">
+          <div class="card-header">
+            <div id="liga-nombre">
+              <div id="liga-logo">
+                <img id="image-logo" src=${liga.logo} />
+              </div>
+              <h3 class="nombre-liga">${liga.name}</h3>
+              <button id="boton-plegable" class="button button-fill boton-plegable-header">
+                <i class="f7-icons">chevron_down</i>
+              </button>
+            </div>
+          </div>
+          <div id="plegable-contenido" class="plegable-content" style="display: none;">
+            <hr>
+            <div class="card-content card-content-padding">
+      `;
+
+      partidos.forEach(matchData => {
+        const fechaHora = new Date(matchData.fixture.date);
+        const horas = fechaHora.getHours();
+        const minutos = fechaHora.getMinutes();
+        let horaYMinutos = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        const golesLocal = matchData.goals.home != null ? matchData.goals.home : "-";
+        const golesVisitante = matchData.goals.away != null ? matchData.goals.away : "-";
+        const estadoPartido = matchData.fixture.status.short;
+
+        if (estadoPartido === "NS") {
+       
+          horaYMinutos;
+        } else if (estadoPartido === "1H") {
+      
+          horaYMinutos = matchData.fixture.status.elapsed + "'";
+        } else if (estadoPartido === "HT") {
+          
+          horaYMinutos = "ET";
+        } else if (estadoPartido === "2H") {
+        
+          horaYMinutos = matchData.fixture.status.elapsed + "'";
+        } else if (estadoPartido === "FT") {
+          horaYMinutos = "Final";
+        }
+
+        html += `
+        <div id="contenedor-mas-Info">
+               <a href="/masInfo/" class="button button-tonal" id="boton-masInfo"><i class="f7-icons info-icon">info_circle</i></a>
+            </div>
+          <div class="equipo-info">
+            <div id="logo-equipo1">
+              <img src=${matchData.teams.home.logo} id="equipo1-logo" class="logo-equipo1" />
+            </div>
+            <div id="nombre-equipo1" class="nombre-equipo">${matchData.teams.home.name}</div>
+            <div id="marcador-equipo1" class="marcador-equipo1">
+              <p id="goles-local">${golesLocal}</p>
+            </div>
+          </div>
+          <div class="horario-notificacion">
+            <div id="horario-partido"><p id="status-partido">${horaYMinutos}</p></div>
+            <div id="notificacion-desactiva-fixture"><i class="f7-icons">bell_slash</i></div>
+          </div>
+          <div class="equipo-info2">
+            <div id="logo-equipo2">
+              <img src=${matchData.teams.away.logo} id="equipo2-logo" class="logo-equipo2" />
+            </div>
+            <div id="nombre-equipo2" class="nombre-equipo2">${matchData.teams.away.name}</div>
+            <div id="marcador-equipo2" class="marcador-equipo2">
+              <p id="goles-visitante">${golesVisitante}</p>
+            </div>
+          </div>
+          <hr>
+        `;
+      });
+
+      html += `
+            </div>
+          </div>
+        </div>
+      `;
+
+      let card = document.createElement('div');
+      card.innerHTML = html;
+      matchInfoContainer.appendChild(card);
+
+      const botonPlegable = card.querySelector("#boton-plegable");
+      const contenidoPlegable = card.querySelector("#plegable-contenido");
+
+      botonPlegable.addEventListener("click", () => {
+        if (contenidoPlegable.style.display === "none") {
+          contenidoPlegable.style.display = "block";
+          botonPlegable.innerHTML = '<i class="f7-icons">chevron_up</i>';
+        } else {
+          contenidoPlegable.style.display = "none";
+          botonPlegable.innerHTML = '<i class="f7-icons">chevron_down</i>';
+        }
+      });
+    })
+    .catch(error => console.log('error', error));
+}
+
 
 /*----------------------------------------------------------------------PARTIDOS DIA SIGUIENTE-------------------------------------------------------------------------------------- */
 
